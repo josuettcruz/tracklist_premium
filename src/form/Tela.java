@@ -145,7 +145,7 @@ public class Tela extends javax.swing.JFrame {
                 }//for(int x = 0; x < orm.Tot(); x++)
                 
                 int z = 0;
-                boolean coding = false;
+                boolean coding = true;
                 
                 for(int rew = orm.Tot()-1; rew >= 0; rew--){
                     
@@ -173,10 +173,10 @@ public class Tela extends javax.swing.JFrame {
                 if(max_track_val){
                     
                     htm += max_track;
-                    htm += " FAIXA";
+                    htm += " faixa";
                     
                     if(max_track > 1){
-                        htm += "S";
+                        htm += "s";
                     }
                     
                 } else {//if(max_track > 1)
@@ -190,7 +190,7 @@ public class Tela extends javax.swing.JFrame {
                 if(max_track_val){
                     htm += new Data().Load();
                 } else {
-                    htm += new Hora(true).getNodeHora(false);
+                    htm += new Hora(true).Load();
                 }
                 
                 htm += ";";
@@ -255,7 +255,7 @@ public class Tela extends javax.swing.JFrame {
                     if(number_track.Val() && number_track.Num() > 0 && !isTempTrack(orm.Read(i, 0))){
                         
                         htm += "Duração: | ";
-                        htm += duraction_track.getNodeHora(true);
+                        htm += duraction_track.Load();
                         htm += ";";
                         
                     }/* orm.Read(i, 6) -- Duração */
@@ -305,8 +305,6 @@ public class Tela extends javax.swing.JFrame {
                         } else {
                             htm += orm.Read(i, 0).replace(" - ", " | ");
                         }
-                        
-                        
                         
                     }//if(orm.Read(i, 0).isBlank())
                     
