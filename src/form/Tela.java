@@ -6,9 +6,6 @@ package form;
 
 import file.*;
 import java.awt.HeadlessException;
-import java.util.ArrayList;
-//import java.util.Arrays;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -62,92 +59,28 @@ public class Tela extends javax.swing.JFrame {
     
     private boolean isTempTrack(String txt){
         
-        boolean val = true;
-        
         final String tema = "1234567890,:";
         
-        int n = 0;
+        int sel = 0;
         
-        while(val && n < txt.length()){
-            
-            boolean valid = false;
+        for(int n = 0; n < txt.length(); n++){
             
             for(int g = 0; g < tema.length(); g++){
                 
                 if(tema.charAt(g) == txt.charAt(n)){
                     
-                    valid = true;
+                    sel++;
+                    break;
                     
                 }//if(tema.charAt(g) == txt.charAt(n))
                 
             }//for(int g = 0; g < tema.length(); g++)
             
-            if(valid){val = false;n = 0;}
-            
-            n++;
-            
-        }//while(val && n < txt.length())
+        }//for(int n = 0; n < txt.length(); n++)
         
-        return val;
+        return sel >= 5;
         
     }//isTempTrack(String txt)
-    
-    private String Simple(String text){
-        
-        String txt = "";
-        
-        for(int i = 0; i < text.length(); i++){
-            
-            char ds = text.charAt(i);
-            
-            boolean space = true;
-            boolean number = true;
-            
-            switch(ds){
-                
-                case ' ':
-                case '_':
-                    
-                    if(space){
-                        
-                        txt += "_";
-                        space = false;
-                        
-                    }//if(space)
-                    
-                break;
-                
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                case '-':
-                    
-                    if(number){
-                        txt += "-";
-                        number = false;
-                    }//if(number)
-                    
-                break;
-                
-                default:
-                space = true;
-                txt += ds;
-                break;
-                
-            }//switch(ds)
-            
-        }//for(int i = 0; i < text.length(); i++)
-        
-        return txt.toLowerCase();
-        
-    }//Simple(String text)
     
     private void Converter(String file){
         
@@ -159,6 +92,8 @@ public class Tela extends javax.swing.JFrame {
         if(ext.equalsIgnoreCase("csv")){
             
             csv orm = new csv(file);
+            
+            int max_tot = 0;
             
             int max_track = 0;
             int max_folder = 0;
@@ -181,6 +116,8 @@ public class Tela extends javax.swing.JFrame {
                 int track_folder_one = 1;
                 
                 for(int x = 0; x < orm.Tot(); x++){
+                    
+                    max_tot += new Numero(orm.Read(x, 6)).Num();
                     
                     int total = new Numero(orm.Read(x, 3)).Num();
                     
@@ -236,10 +173,10 @@ public class Tela extends javax.swing.JFrame {
                 if(max_track_val){
                     
                     htm += max_track;
-                    htm += " faixa";
+                    htm += " FAIXA";
                     
                     if(max_track > 1){
-                        htm += "s";
+                        htm += "S";
                     }
                     
                 } else {//if(max_track > 1)
@@ -256,6 +193,9 @@ public class Tela extends javax.swing.JFrame {
                     htm += new Hora(true).getNodeHora(false);
                 }
                 
+                htm += ";";
+                htm += new Hora(max_tot).Load();
+                
                 int folder = 1;
                 String indo = "";
                 
@@ -267,16 +207,11 @@ public class Tela extends javax.swing.JFrame {
 
                     if(!orm.Read(i, 2).isBlank() && !orm.Read(i, 2).equalsIgnoreCase(indo)){
                         
-                        final int max_hifen = 30;
-                        int hifen = orm.Read(i, 2).length() > max_hifen ? max_hifen : orm.Read(i, 2).length();
-                        
                         htm += "Pasta: ";
                         htm += Number(folder,max_folder);
                         htm += " de ";
                         htm += max_folder;
                         htm += ";";
-                        htm += "_".repeat(hifen);
-                        htm += " | ";
                         htm += orm.Read(i, 2).replaceAll("_", " | ");
                         htm += "\n";
                         
@@ -295,17 +230,13 @@ public class Tela extends javax.swing.JFrame {
                         
                         htm += Number(track.Num(),max_track);
                         
-                        htm += " de ";
-                        
-                        htm += max_track;
-                        
                         htm += ";";
                         
                     }//if(track.Val() && track.Num() > 0 && track.Num() < 1000)
                     
                     // Faixa da pasta
                     
-                    if(track_folder[i] > 0){
+                    if(track_folder[i] > 0 && track_one[i] != track.Num()){
                         
                         htm += "Arquivo: ";
                         htm += Number(track_one[i],track_folder[i]);
@@ -321,9 +252,7 @@ public class Tela extends javax.swing.JFrame {
                     
                     Hora duraction_track = new Hora(number_track.Num());
                     
-                    boolean rest = duraction_track.getHora().getMinute() % 10 == 0 && duraction_track.getHora().getSecond() == 0;
-                    
-                    if(number_track.Val() && number_track.Num() > 0 && !rest){
+                    if(number_track.Val() && number_track.Num() > 0 && !isTempTrack(orm.Read(i, 0))){
                         
                         htm += "Duração: | ";
                         htm += duraction_track.getNodeHora(true);
@@ -371,21 +300,19 @@ public class Tela extends javax.swing.JFrame {
                         
                     } else {//if(orm.Read(i, 0).isBlank())
                         
-                        String sub;
-                        
                         if(isTempTrack(orm.Read(i, 0))){
-                            sub = " | ";
+                            htm += orm.Read(i, 0);
                         } else {
-                            sub = " --- ";
+                            htm += orm.Read(i, 0).replace(" - ", " | ");
                         }
                         
-                        htm += orm.Read(i, 0).replace(" - ", sub);
+                        
                         
                     }//if(orm.Read(i, 0).isBlank())
                     
                     /* orm.Read(i, 1) -- Artista **/
 
-                    if(!orm.Read(i, 1).isBlank()){
+                    if(!orm.Read(i, 1).isBlank() && !orm.Read(i, 1).equalsIgnoreCase(orm.Read(i, 0))){
                         
                         htm += ";";
                         htm += orm.Read(i, 1).replace(" - ", " | ");
@@ -405,8 +332,6 @@ public class Tela extends javax.swing.JFrame {
             out += new Data().Load();
             out += "_";
             out += new Hora(true).Load();
-            out += "_";
-            out += Simple(name);
             
             html export = new html(out,htm);
             

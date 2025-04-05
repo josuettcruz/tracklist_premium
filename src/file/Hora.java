@@ -69,9 +69,11 @@ public class Hora {
             
         }/*for(int z = 0; z <= timer; z++)*/
         
-        this.hora = LocalTime.of(round(timer/(60*60)),
-                round(timer/60),
-                timer % 60);
+        this.hora = LocalTime.of(
+                round(timer/(60*60)) >= 23 ? 23 : round(timer/(60*60)),
+                round(timer/(60*60)) % 60,
+                timer % 60
+        );
         
     }//Hora(int timer)
     
