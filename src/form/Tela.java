@@ -232,9 +232,60 @@ public class Tela extends javax.swing.JFrame {
                         
                         htm += Number(track.Num(),max_track);
                         
+                        /* TOTAL DE FAIXAS **/
+                        htm += " de ";
+                        htm += Number(max_track,0);
+                        /* TOTAL DE FAIXAS */
+                        
                         htm += ";";
                         
                     }//if(track.Val() && track.Num() > 0 && track.Num() < 1000)
+                    
+                    /* orm.Read(i, 10) -- Nome **/
+                    
+                    String nome_arq = orm.Read(i, 10);
+                    
+                    int ext_arq = nome_arq.contains(".") ? nome_arq.lastIndexOf(".") : nome_arq.length();
+                    
+                    if(!isTempTrack(orm.Read(i, 10),12)){
+                        
+                        if(ext_arq < nome_arq.length()-1){
+                            
+                            switch(nome_arq.substring(ext_arq+1).toLowerCase()){
+                                
+                                case "mp3" ->{
+                                    
+                                    htm += nome_arq.substring(0, ext_arq);
+                                    
+                                }//case "mp3"
+                                
+                                case "m4a" ->{
+                                    
+                                    htm += "[MPEG-4 ÁUDIO] ";
+                                    htm += nome_arq.substring(0, ext_arq);
+                                    
+                                }//case "m4a"
+                                
+                                default ->{
+                                    
+                                    htm += nome_arq.substring(0, ext_arq).toUpperCase();
+                                    htm += nome_arq.substring(ext_arq).toLowerCase();
+                                    
+                                }//default
+                                
+                            }//switch(nome_arq.substring(ext_arq+1).toLowerCase())
+                            
+                        } else {//if(ext_arq < nome_arq.length()-1)
+                            
+                            htm += orm.Read(i, 10);
+                            
+                        }//if(ext_arq < nome_arq.length()-1)
+                        
+                        htm += ";";
+                        
+                    }//if(!isTempTrack(orm.Read(i, 10),10))
+                    
+                    /* orm.Read(i, 10) -- Nome */
                     
                     // Faixa da pasta
                     
