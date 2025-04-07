@@ -57,7 +57,9 @@ public class Tela extends javax.swing.JFrame {
         
     }
     
-    private boolean isTempTrack(String txt){
+    private boolean isTempTrack(String txt, int min){
+        
+        if(min < 0){min = min - min * 2;}
         
         final String tema = "1234567890,:";
         
@@ -78,7 +80,7 @@ public class Tela extends javax.swing.JFrame {
             
         }//for(int n = 0; n < txt.length(); n++)
         
-        return sel >= 5;
+        return sel >= min;
         
     }//isTempTrack(String txt)
     
@@ -193,7 +195,7 @@ public class Tela extends javax.swing.JFrame {
                     htm += new Hora(true).Load();
                 }
                 
-                htm += ";";
+                htm += ";Duração total: | ";
                 htm += new Hora(max_tot).Load();
                 
                 int folder = 1;
@@ -236,7 +238,9 @@ public class Tela extends javax.swing.JFrame {
                     
                     // Faixa da pasta
                     
-                    if(track_folder[i] > 0 && track_one[i] != track.Num()){
+                    boolean arquivo = folder > 2;
+                    
+                    if(arquivo/* && track_folder[i] > 0 && track_one[i] != track.Num()*/){
                         
                         htm += "Arquivo: ";
                         htm += Number(track_one[i],track_folder[i]);
@@ -252,7 +256,11 @@ public class Tela extends javax.swing.JFrame {
                     
                     Hora duraction_track = new Hora(number_track.Num());
                     
-                    if(number_track.Val() && number_track.Num() > 0 && !isTempTrack(orm.Read(i, 0))){
+                    boolean read = number_track.Val() && number_track.Num() > 0 && !isTempTrack(orm.Read(i, 0),10);
+                    //boolean time = duraction_track.getHora().getSecond() <= 58 && duraction_track.getHora().getSecond() >= 2;
+                    //boolean into_date = read || time;
+                    
+                    if(read){
                         
                         htm += "Duração: | ";
                         htm += duraction_track.Load();
@@ -300,10 +308,10 @@ public class Tela extends javax.swing.JFrame {
                         
                     } else {//if(orm.Read(i, 0).isBlank())
                         
-                        if(isTempTrack(orm.Read(i, 0))){
+                        if(isTempTrack(orm.Read(i, 0),10)){
                             htm += orm.Read(i, 0);
                         } else {
-                            htm += orm.Read(i, 0).replace(" - ", " | ");
+                            htm += orm.Read(i, 0).trim().replace(" - ", " | ");
                         }
                         
                     }//if(orm.Read(i, 0).isBlank())
@@ -313,7 +321,7 @@ public class Tela extends javax.swing.JFrame {
                     if(!orm.Read(i, 1).isBlank() && !orm.Read(i, 1).equalsIgnoreCase(orm.Read(i, 0))){
                         
                         htm += ";";
-                        htm += orm.Read(i, 1).replace(" - ", " | ");
+                        htm += orm.Read(i, 1).trim().replace(" - ", " | ");
 
                     }/*if(!orm.Read(i, 1).isBlank()) */
                     
