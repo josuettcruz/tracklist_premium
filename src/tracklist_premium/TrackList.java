@@ -23,7 +23,7 @@ public class TrackList {
         System.out.print("Alterado ");
         System.out.print(new Data("07/04/2025").DataLinha(false));
         System.out.print(" às ");
-        System.out.println(new Hora("11:27").getNodeHora(false));
+        System.out.println(new Hora("11:32").getNodeHora(false));
         System.out.println();
         
         new Tela().Enter(true);
