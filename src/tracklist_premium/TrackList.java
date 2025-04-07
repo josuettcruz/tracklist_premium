@@ -25,7 +25,6 @@ public class TrackList {
         System.out.print(" às ");
         System.out.println(new Hora("11:27").getNodeHora(false));
         System.out.println();
-        System.out.println();
         
         new Tela().Enter(true);
         
