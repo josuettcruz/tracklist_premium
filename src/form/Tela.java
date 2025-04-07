@@ -23,7 +23,7 @@ public class Tela extends javax.swing.JFrame {
         
         initComponents();
         setVisible(true);
-        setTitle("Hoje é " + new Data().DataCompleta(true) + "!");
+        setTitle("Hoje é dia: " + new Data().DataCompleta(false) + "!");
         setLocation(300,150);
         setResizable(false);
         
@@ -360,9 +360,9 @@ public class Tela extends javax.swing.JFrame {
                     } else {//if(orm.Read(i, 0).isBlank())
                         
                         if(isTempTrack(orm.Read(i, 0),10)){
-                            htm += orm.Read(i, 0);
+                            htm += orm.Read(i, 0).replaceAll("\f", "");
                         } else {
-                            htm += orm.Read(i, 0).trim().replace(" - ", " | ");
+                            htm += orm.Read(i, 0).trim().replace(" - ", " | ").replaceAll("\f", "");
                         }
                         
                     }//if(orm.Read(i, 0).isBlank())
@@ -372,7 +372,7 @@ public class Tela extends javax.swing.JFrame {
                     if(!orm.Read(i, 1).isBlank() && !orm.Read(i, 1).equalsIgnoreCase(orm.Read(i, 0))){
                         
                         htm += ";";
-                        htm += orm.Read(i, 1).trim().replace(" - ", " | ");
+                        htm += orm.Read(i, 1).trim().replace(" - ", " | ").replaceAll("\f", "");
 
                     }/*if(!orm.Read(i, 1).isBlank()) */
                     

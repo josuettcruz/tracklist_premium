@@ -5,6 +5,8 @@
 package tracklist_premium;
 
 import form.Tela;
+import file.Data;
+import file.Hora;
 
 /**
  *
@@ -17,8 +19,15 @@ public class TrackList {
      */
     public static void main(String[] args) {
         
-        Tela id = new Tela();
-        id.Enter(true);
+        System.out.print("\f\f TrackList -- ");
+        System.out.print("Alterado ");
+        System.out.print(new Data("07/04/2025").DataLinha(false));
+        System.out.print(" às ");
+        System.out.println(new Hora("11:27").getNodeHora(false));
+        System.out.println();
+        System.out.println();
+        
+        new Tela().Enter(true);
         
     }
     
